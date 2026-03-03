@@ -2,39 +2,175 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Live Klasemen OIM FTUI 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
 
 <style>
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  height: 100%;
   font-family: 'Segoe UI', sans-serif;
-  background: url('1772524502909.jpg') no-repeat center center fixed;
+  background: url('background.jpg') no-repeat center center fixed;
   background-size: cover;
   color: white;
-  text-align: center;
 }
 
 h1 {
-  margin-top: 40px;
+  text-align: center;
   font-size: 48px;
+  margin: 40px 0 10px;
   letter-spacing: 2px;
 }
 
 .container {
-  width: 90%;
-  margin: 40px auto;
+  width: 92%;
+  margin: auto;
 }
 
 .glass {
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(10px);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(12px);
   padding: 30px;
   border-radius: 20px;
+  overflow-x: auto;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
 }
 
 table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  color: black;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th {
+  background: #111827;
+  color: white;
+  padding: 18px;
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 16px;
+  font-size: 20px;
+  transition: 0.3s;
+}
+
+tr:nth-child(even) {
+  background: #f3f4f6;
+}
+
+tr:first-child(2) {
+      background: gold;
+      font-weight: bold;
+    }
+
+    tr:nth-child(3) {
+      background: silver;
+    }
+
+    tr:nth-child(4) {
+      background: #cd7f32;
+      color: white;
+    }
+
+/* ===== Highlight Top Row ===== */
+.top-row {
+  font-weight: bold;
+  transform: scale(1.01);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  margin: 20px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  h1 { font-size: 36px; }
+  td, th { font-size: 16px; padding: 12px; }
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 26px; }
+  td, th { font-size: 14px; padding: 8px; }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 20px; }
+  td, th { font-size: 12px; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>LIVE Klasemen OIM FTUI 2026</h1>
+
+<div class="container">
+  <div class="glass">
+    <table id="leaderboard"></table>
+  </div>
+</div>
+
+<div class="footer">
+  Auto update setiap 5 detik
+</div>
+
+<script>
+const csvUrl = "https://docs.google.com/spreadsheets/d/101QfX3oH3yXJlFW7XsDDI9y5-1WLM-EGJoofN0ruAkA/gviz/tq?tqx=out:csv&sheet=LEADERBOARD"; // GANTI LINK CSV
+
+function loadData() {
+  Papa.parse(csvUrl, {
+    download: true,
+    complete: function(results) {
+      let data = results.data;
+      let table = "";
+
+      data.forEach((row, index) => {
+        if(row.length > 1){
+
+          let rankClass = "";
+          let rowClass = "";
+
+          if(index === 1){ rankClass = "rank-1"; rowClass = "top-row"; }
+          if(index === 2){ rankClass = "rank-2"; }
+          if(index === 3){ rankClass = "rank-3"; }
+
+          table += `<tr class="${rowClass}">`;
+
+          row.forEach((cell, i) => {
+            if(i === 0 && index !== 0){
+              table += `<td class="${rankClass}">${cell}</td>`;
+            } else {
+              table += `<td>${cell}</td>`;
+            }
+          });
+
+          table += "</tr>";
+        }
+      });
+
+      document.getElementById("leaderboard").innerHTML = table;
+    }
+  });
+}
+
+loadData();
+setInterval(loadData, 5000);
+</script>
+
+</body>
+</html>table {
   width: 100%;
   border-collapse: collapse;
   background: white;

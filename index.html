@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Live Klasemen OIM 2026</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 42px;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      width: 90%;
+      margin: 40px auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      color: black;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+
+    th {
+      background: #0f172a;
+      color: white;
+      padding: 15px;
+      font-size: 18px;
+    }
+
+    td {
+      padding: 12px;
+      font-size: 17px;
+    }
+
+    tr:nth-child(even) {
+      background: #f1f5f9;
+    }
+
+    tr:first-child {
+      background: gold;
+      font-weight: bold;
+    }
+
+    tr:nth-child(2) {
+      background: silver;
+    }
+
+    tr:nth-child(3) {
+      background: #cd7f32;
+      color: white;
+    }
+
+    .footer {
+      margin: 30px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🏆 LIVE Klasemen OIM FTUI 2026 🏆</h1>
+
+  <div class="container">
+    <table id="leaderboard"></table>
+  </div>
+
+  <div class="footer">
+    Auto update setiap 5 detik
+  </div>
+
+<script>
+const csvUrl = "https://docs.google.com/spreadsheets/d/101QfX3oH3yXJlFW7XsDDI9y5-1WLM-EGJoofN0ruAkA/gviz/tq?tqx=out:csv&sheet=LEADERBOARD"; // <-- GANTI DI SINI
+
+function loadData() {
+  Papa.parse(csvUrl, {
+    download: true,
+    complete: function(results) {
+      let data = results.data;
+      let table = "";
+
+      data.forEach((row, index) => {
+        if(row.length > 1){
+          table += "<tr>";
+          row.forEach(cell => {
+            table += `<td>${cell}</td>`;
+          });
+          table += "</tr>";
+        }
+      });
+
+      document.getElementById("leaderboard").innerHTML = table;
+    }
+  });
+}
+
+loadData();
+setInterval(loadData, 5000);
+</script>
+
+</body>
+  </html>
